@@ -1,159 +1,159 @@
-import { Head, router } from "@inertiajs/react";
+import { DragDropContext } from "@hello-pangea/dnd";
+import { Head, Link, router } from "@inertiajs/react";
+import { ArrowLeft } from "lucide-react";
+import { useEffect, useState } from "react";
+import KanbanColumn from "@/Components/Kanban/KanbanColumn";
+import { HealthBadge } from "@/Components/UI/HealthBadge";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-const STATUS_LABELS = {
-	pending: "Pendente",
-	in_progress: "Em Andamento",
-	completed: "Concluída",
-};
-
-const STATUS_COLORS = {
-	pending: "bg-gray-100 border-gray-300",
-	in_progress: "bg-blue-50 border-blue-200",
-	completed: "bg-green-50 border-green-200",
-};
-
 export default function Show({ auth, project }) {
-	const tasks = project.data.tasks;
+	const [localTasks, setLocalTasks] = useState(project.data.tasks);
 
-	// Filter tasks into columns
-	const columns = {
-		pending: tasks.filter((t) => t.status.value === "pending"),
-		in_progress: tasks.filter((t) => t.status.value === "in_progress"),
-		completed: tasks.filter((t) => t.status.value === "completed"),
+	useEffect(() => {
+		setLocalTasks(project.data.tasks);
+	}, [project.data.tasks]);
+
+	const { title, health, description, id } = project.data;
+
+	const onDragEnd = (result) => {
+		const { destination, source, draggableId } = result;
+		if (!destination) return;
+		if (
+			destination.droppableId === source.droppableId &&
+			destination.index === source.index
+		)
+			return;
+
+		const newStatus = destination.droppableId;
+		const updatedTasks = localTasks.map((t) =>
+			t.id.toString() === draggableId ? { ...t, status: newStatus } : t,
+		);
+		setLocalTasks(updatedTasks);
+
+		if (source.droppableId !== destination.droppableId) {
+			router.patch(
+				route("tasks.update", draggableId),
+				{ status: newStatus },
+				{
+					preserveScroll: true,
+					onError: () => setLocalTasks(project.data.tasks),
+				},
+			);
+		}
 	};
 
+	const columns = {
+		pending: localTasks.filter((t) => t.status === "pending"),
+		in_progress: localTasks.filter((t) => t.status === "in_progress"),
+		completed: localTasks.filter((t) => t.status === "completed"),
+	};
+
+	const totalTasks = localTasks.length;
+	const completedCount = columns.completed.length;
+	const delayedCount = localTasks.filter((t) => t.is_delayed).length;
+
+	const progress =
+		totalTasks === 0 ? 0 : Math.round((completedCount / totalTasks) * 100);
+
 	return (
-		<AuthenticatedLayout
-			user={auth.user}
-			header={
-				<div className="flex justify-between items-center">
-					<h2 className="font-semibold text-xl text-gray-800 leading-tight">
-						{project.data.title}
-					</h2>
-					{/* Health Badge in Header */}
-					<span
-						className={`px-3 py-1 rounded-full text-sm font-bold ${
-							project.data.health.is_alert
-								? "bg-red-100 text-red-800"
-								: "bg-green-100 text-green-800"
-						}`}
-					>
-						{project.data.health.label}
-					</span>
-				</div>
-			}
-		>
-			<Head title={`Kanban - ${project.data.title}`} />
+		<AuthenticatedLayout user={auth.user} header={null}>
+			<Head title={`Kanban - ${title}`} />
 
-			<div className="py-12">
-				<div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-					{/* Kanban Board Grid */}
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
-						<KanbanColumn
-							title="Pendente"
-							tasks={columns.pending}
-							color="border-t-4 border-gray-400"
-						/>
-
-						<KanbanColumn
-							title="Em Andamento"
-							tasks={columns.in_progress}
-							color="border-t-4 border-blue-400"
-						/>
-
-						<KanbanColumn
-							title="Concluída"
-							tasks={columns.completed}
-							color="border-t-4 border-green-400"
-						/>
+			<div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+					<div className="mb-4">
+						<Link
+							href={route("dashboard")}
+							className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-900 transition-colors font-medium group"
+						>
+							<ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+							Voltar para Dashboard
+						</Link>
 					</div>
+
+					<div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+						<div className="space-y-2 flex-1">
+							<div className="flex items-center gap-3">
+								<h2 className="text-3xl font-bold text-gray-900 tracking-tight leading-none">
+									{title}
+								</h2>
+								<HealthBadge status={health} />
+							</div>
+							<p className="text-sm text-gray-500 max-w-2xl leading-relaxed">
+								{description ||
+									"Gerencie as tarefas do seu projeto visualmente."}
+							</p>
+						</div>
+
+						<div className="flex items-center gap-8 bg-gray-50/50 px-6 py-3 rounded-xl border border-gray-100">
+							<div className="flex flex-col items-center min-w-[60px]">
+								<span className="text-[10px] uppercase tracking-wider font-bold text-gray-400 mb-0.5">
+									Total
+								</span>
+								<span className="text-xl font-bold text-gray-900">
+									{totalTasks}
+								</span>
+							</div>
+
+							<div className="w-px h-8 bg-gray-200/60" />
+
+							<div className="flex flex-col items-center min-w-[60px]">
+								<span className="text-[10px] uppercase tracking-wider font-bold text-gray-400 mb-0.5">
+									Atrasadas
+								</span>
+								<span
+									className={`text-xl font-bold ${delayedCount > 0 ? "text-red-600" : "text-gray-900"}`}
+								>
+									{delayedCount}
+								</span>
+							</div>
+
+							<div className="w-px h-8 bg-gray-200/60" />
+
+							<div className="flex flex-col items-center min-w-[60px]">
+								<span className="text-[10px] uppercase tracking-wider font-bold text-gray-400 mb-0.5">
+									Progresso
+								</span>
+								<div className="flex items-center gap-1.5">
+									<span className="text-xl font-bold text-emerald-600">
+										{progress}%
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div className="min-h-[calc(100vh-180px)] bg-gray-50/50 py-8 overflow-x-auto">
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+					<DragDropContext onDragEnd={onDragEnd}>
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-full items-start">
+							<KanbanColumn
+								projectId={id}
+								droppableId="pending"
+								title="Pendente"
+								tasks={columns.pending}
+								dotColor="bg-gray-400"
+							/>
+							<KanbanColumn
+								projectId={id}
+								droppableId="in_progress"
+								title="Em Andamento"
+								tasks={columns.in_progress}
+								dotColor="bg-blue-500"
+							/>
+							<KanbanColumn
+								projectId={id}
+								droppableId="completed"
+								title="Finalizado"
+								tasks={columns.completed}
+								dotColor="bg-emerald-500"
+							/>
+						</div>
+					</DragDropContext>
 				</div>
 			</div>
 		</AuthenticatedLayout>
-	);
-}
-
-// Sub-component for the Column
-function KanbanColumn({ title, tasks, color }) {
-	return (
-		<div className={`bg-white rounded-lg shadow-sm p-4 ${color} min-h-[500px]`}>
-			<h3 className="font-bold text-gray-700 mb-4 flex justify-between">
-				{title}
-				<span className="bg-gray-100 text-gray-600 px-2 rounded-full text-xs py-1">
-					{tasks.length}
-				</span>
-			</h3>
-
-			<div className="space-y-3">
-				{tasks.map((task) => (
-					<TaskCard key={task.id} task={task} />
-				))}
-				{tasks.length === 0 && (
-					<div className="text-gray-400 text-sm text-center italic mt-10">
-						Vazio
-					</div>
-				)}
-			</div>
-		</div>
-	);
-}
-
-// Sub-component for the Card (Handles Logic)
-function TaskCard({ task }) {
-	// Function to handle status change
-	const handleChange = (e) => {
-		const newStatus = e.target.value;
-
-		// Inertia Manual Visit (Patch Request)
-		router.patch(
-			route("tasks.update", task.id),
-			{
-				status: newStatus,
-			},
-			{
-				preserveScroll: true, // Don't scroll to top
-				onSuccess: () => {
-					// Optional: Toast notification here
-					console.log("Status updated!");
-				},
-			},
-		);
-	};
-
-	return (
-		<div
-			className={`p-4 rounded border shadow-sm bg-white ${task.is_delayed ? "border-red-300 bg-red-50" : "border-gray-200"}`}
-		>
-			<div className="flex justify-between items-start mb-2">
-				<span className="font-semibold text-gray-800 text-sm">
-					{task.title}
-				</span>
-				{task.is_delayed && (
-					<span className="text-[10px] bg-red-200 text-red-800 px-1 rounded font-bold">
-						ATRASADO
-					</span>
-				)}
-			</div>
-
-			<p className="text-gray-500 text-xs mb-3 line-clamp-2">
-				{task.description}
-			</p>
-
-			<div className="flex justify-between items-center mt-2">
-				<span className="text-xs text-gray-400">{task.deadline}</span>
-
-				{/* Status Changer */}
-				<select
-					value={task.status.value}
-					onChange={handleChange}
-					className="text-xs p-1 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
-				>
-					<option value="pending">Pendente</option>
-					<option value="in_progress">Em Andamento</option>
-					<option value="completed">Concluída</option>
-				</select>
-			</div>
-		</div>
 	);
 }
