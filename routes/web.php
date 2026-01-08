@@ -1,7 +1,39 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [ProjectController::class, 'index'])->name('dashboard');
+
+    Route::prefix('projects')->group(function () {
+        Route::get('/{project}', [ProjectController::class, 'show'])->name('projects.show');
+        Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
+    });
+
+    Route::prefix('tasks')->group(function () {
+        Route::patch('/{task}', [TaskController::class, 'update'])->name('tasks.update');
+        Route::post('/', [TaskController::class, 'store'])->name('tasks.store');
+    });
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
