@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('status')->default('pending');
             $table->dateTime('deadline')->nullable();
+            $table->unsignedBigInteger('position')->default(0)->index();
             $table->timestamps();
         });
     }
