@@ -53,7 +53,6 @@ const KanbanTaskCard = ({ task, index }) => {
 						{...provided.draggableProps}
 						{...provided.dragHandleProps}
 						style={{ ...provided.draggableProps.style }}
-						className="mb-3"
 					>
 						<Card
 							className={cn(

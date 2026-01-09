@@ -18,23 +18,6 @@ export default function Show({ auth, project }) {
 	const progress =
 		totalTasks === 0 ? 0 : Math.round((completedCount / totalTasks) * 100);
 
-	const containerVariants = {
-		hidden: { opacity: 0 },
-		visible: {
-			opacity: 1,
-			transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-		},
-	};
-
-	const itemVariants = {
-		hidden: { y: 20, opacity: 0 },
-		visible: {
-			y: 0,
-			opacity: 1,
-			transition: { type: "spring", stiffness: 100, damping: 10 },
-		},
-	};
-
 	return (
 		<AuthenticatedLayout user={auth.user} header={null}>
 			<Head title={`Kanban - ${title}`} />
@@ -120,18 +103,10 @@ export default function Show({ auth, project }) {
 					</div>
 				</motion.div>
 
-				<motion.div
-					variants={containerVariants}
-					initial="hidden"
-					animate="visible"
-					className="h-full py-8 overflow-x-auto"
-				>
+				<div className="h-full py-8 overflow-x-auto">
 					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
 						<DragDropContext onDragEnd={onDragEnd}>
-							<motion.div
-								variants={itemVariants}
-								className="grid grid-cols-1 md:grid-cols-3 gap-8 h-full items-start"
-							>
+							<div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-full items-start">
 								<KanbanColumn
 									projectId={id}
 									droppableId="pending"
@@ -153,10 +128,10 @@ export default function Show({ auth, project }) {
 									tasks={columns.completed}
 									dotColor="bg-emerald-500"
 								/>
-							</motion.div>
+							</div>
 						</DragDropContext>
 					</div>
-				</motion.div>
+				</div>
 			</div>
 		</AuthenticatedLayout>
 	);
