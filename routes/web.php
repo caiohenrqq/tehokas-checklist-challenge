@@ -21,10 +21,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('projects')->group(function () {
         Route::get('/{project}', [ProjectController::class, 'show'])->name('projects.show');
+        Route::patch('/{project}', [ProjectController::class, 'update'])->name('projects.update');
         Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
+        Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
     });
 
     Route::prefix('tasks')->group(function () {
+        Route::patch('/reorder', [TaskController::class, 'reorder'])->name('tasks.reorder');;
         Route::patch('/{task}', [TaskController::class, 'update'])->name('tasks.update');
         Route::post('/', [TaskController::class, 'store'])->name('tasks.store');
         Route::delete('/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');

@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\TaskStatus;
+use App\Http\Requests\ReorderTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Enum;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    public function update(Request $request, Task $task): RedirectResponse
+    public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
-        $validated = $request->validate([
-            'status' => ['nullable', new Enum(TaskStatus::class)],
-            'title' => ['nullable', 'string', 'max:255'],
-            'deadline' => ['nullable', 'date'],
-            'description' => ['nullable', 'string'],
-        ]);
-
-        $task->update($validated);
+        $task->update($request->validated());
 
         return back();
     }
@@ -35,6 +28,20 @@ class TaskController extends Controller
     public function destroy(Task $task): RedirectResponse
     {
         $task->delete();
+
+        return back();
+    }
+
+    public function reorder(ReorderTaskRequest $request): RedirectResponse
+    {
+        DB::transaction(function () use ($request) {
+            foreach ($request->input('ids') as $index => $id) {
+                Task::where('id', $id)->update([
+                    'position' => $index,
+                    'status'   => $request->input('status'),
+                ]);
+            }
+        });
 
         return back();
     }

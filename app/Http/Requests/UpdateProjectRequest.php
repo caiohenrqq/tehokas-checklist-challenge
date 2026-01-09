@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\TaskStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
-class StoreTaskRequest extends FormRequest
+class UpdateProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +22,8 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'project_id' => ['required', 'exists:projects,id'],
-            'title' => ['required', 'string', 'max:255'],
-            'description'=> ['nullable', 'string'],
-            'deadline' => ['nullable', 'date'],
-            'status' => ['required', new Enum(TaskStatus::class)],
+            'title' => ['sometimes', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
         ];
     }
 }
