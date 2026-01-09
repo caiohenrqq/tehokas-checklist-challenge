@@ -11,10 +11,10 @@ const KanbanColumn = ({ projectId, title, tasks, dotColor, droppableId }) => {
 						<div className="relative flex h-2.5 w-2.5">
 							<span
 								className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${dotColor}`}
-							></span>
+							/>
 							<span
 								className={`relative inline-flex rounded-full h-2.5 w-2.5 ${dotColor}`}
-							></span>
+							/>
 						</div>
 					) : (
 						<div className={`w-2.5 h-2.5 rounded-full ${dotColor}`} />
