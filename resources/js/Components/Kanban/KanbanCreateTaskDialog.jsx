@@ -42,9 +42,19 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 	});
 
 	const statusMap = {
-		pending: { label: "Pendente", color: "bg-gray-100 text-gray-600" },
-		in_progress: { label: "Em Andamento", color: "bg-blue-50 text-blue-700" },
-		completed: { label: "Finalizado", color: "bg-emerald-50 text-emerald-700" },
+		pending: {
+			label: "Pendente",
+			color: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+		},
+		in_progress: {
+			label: "Em Andamento",
+			color: "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400",
+		},
+		completed: {
+			label: "Finalizado",
+			color:
+				"bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400",
+		},
 	};
 
 	const { data, setData, post, processing, errors, reset } = useForm({
@@ -85,35 +95,35 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 				<DialogTrigger asChild>
 					<button
 						type="button"
-						className="w-full mt-3 py-2.5 flex items-center justify-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-50/80 rounded-lg border-2 border-transparent hover:border-dashed hover:border-gray-200 transition-all group"
+						className="w-full mt-3 py-2.5 flex items-center justify-center gap-2 text-sm font-medium text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg border-2 border-transparent hover:border-dashed hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group"
 					>
-						<div className="p-1 rounded-md bg-transparent group-hover:bg-white transition-colors">
+						<div className="p-1 rounded-md bg-transparent group-hover:bg-white dark:group-hover:bg-zinc-900 transition-colors">
 							<Plus className="w-4 h-4 transition-transform duration-500 group-hover:rotate-180" />
 						</div>
 					</button>
 				</DialogTrigger>
 
-				<DialogContent className="sm:max-w-[425px] p-0 gap-0 border-0 shadow-2xl">
+				<DialogContent className="sm:max-w-[425px] p-0 gap-0 border-0 shadow-2xl bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100">
 					<form onSubmit={handleSubmit}>
 						<DialogHeader className="px-6 pt-6 pb-2">
 							<div className="flex items-center gap-3">
 								<div
-									className={`p-2 rounded-lg ${statusMap[status]?.color || "bg-gray-100"}`}
+									className={`p-2 rounded-lg ${statusMap[status]?.color || "bg-zinc-100"}`}
 								>
 									<ListTodo className="w-5 h-5" />
 								</div>
 								<div className="space-y-0.5">
-									<DialogTitle className="text-lg font-bold text-gray-900">
+									<DialogTitle className="text-lg font-bold text-zinc-900 dark:text-white">
 										Nova Tarefa
 									</DialogTitle>
 									<DialogDescription className="sr-only">
 										Criar nova tarefa na coluna {columnTitle}
 									</DialogDescription>
-									<div className="flex items-center gap-2 text-xs text-gray-500">
+									<div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
 										Adicionando em:
 										<Badge
 											variant="secondary"
-											className={`text-[10px] h-5 px-1.5 ${statusMap[status]?.color}`}
+											className={`text-[10px] h-5 px-1.5 border-0 ${statusMap[status]?.color}`}
 										>
 											{columnTitle}
 										</Badge>
@@ -126,7 +136,7 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 							<div className="space-y-2">
 								<Label
 									htmlFor="title"
-									className="text-xs font-bold text-gray-500 uppercase tracking-wider"
+									className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider"
 								>
 									Título
 								</Label>
@@ -135,7 +145,7 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 									value={data.title}
 									onChange={(e) => setData("title", e.target.value)}
 									placeholder="O que precisa ser feito?"
-									className={`h-11 shadow-sm border-gray-200 focus-visible:ring-indigo-500/20 focus-visible:border-indigo-500 ${errors.title ? "border-red-300" : ""}`}
+									className={`h-11 shadow-sm bg-transparent border-zinc-200 dark:border-zinc-800 focus-visible:ring-indigo-500/20 focus-visible:border-indigo-500 ${errors.title ? "border-red-300 dark:border-red-800" : ""}`}
 									autoFocus
 								/>
 								{errors.title && (
@@ -146,7 +156,7 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 							</div>
 
 							<div className="space-y-2 flex flex-col">
-								<Label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+								<Label className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider flex items-center gap-2">
 									<CalendarIcon className="w-3.5 h-3.5" /> Prazo Final
 								</Label>
 								<div className="flex gap-2">
@@ -155,7 +165,7 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 											<Button
 												variant="outline"
 												className={cn(
-													"w-full pl-3 text-left font-normal h-10 border-gray-200 shadow-sm",
+													"w-full pl-3 text-left font-normal h-10 border-zinc-200 dark:border-zinc-800 bg-transparent hover:bg-zinc-50 dark:hover:bg-zinc-800 shadow-sm",
 													!data.deadline && "text-muted-foreground",
 												)}
 											>
@@ -183,7 +193,7 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 											variant="ghost"
 											size="icon"
 											onClick={() => setData("deadline", null)}
-											className="h-10 w-10 text-gray-500"
+											className="h-10 w-10 text-zinc-500 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800"
 										>
 											<X className="w-4 h-4" />
 										</Button>
@@ -192,13 +202,13 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 							</div>
 						</div>
 
-						<DialogFooter className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
+						<DialogFooter className="px-6 py-4 bg-zinc-50/50 dark:bg-zinc-900/50 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
 							<Button
 								type="button"
 								variant="ghost"
 								size="sm"
 								onClick={() => setOpen(false)}
-								className="text-gray-500"
+								className="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
 							>
 								Cancelar
 							</Button>
@@ -206,7 +216,7 @@ const KanbanCreateTaskDialog = ({ projectId, status, columnTitle }) => {
 								type="submit"
 								size="sm"
 								disabled={processing}
-								className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm px-6"
+								className="bg-zinc-900 hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-200 shadow-sm px-6 rounded-full"
 							>
 								{processing && (
 									<Loader2 className="mr-2 h-3 w-3 animate-spin" />

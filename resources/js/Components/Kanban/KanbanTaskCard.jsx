@@ -91,7 +91,6 @@ const KanbanTaskCard = ({ task, index }) => {
 												</DropdownMenuItem>
 												<DropdownMenuItem
 													className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer"
-													// Opens the custom delete dialog
 													onClick={() => setDeleteDialogOpen(true)}
 												>
 													<Trash2 className="w-3.5 h-3.5 mr-2" />
