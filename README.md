@@ -1,4 +1,4 @@
-# Tehokas | Checklist em Laravel e Inertia.js
+# Tehokas | Checklist (Kanban) em Laravel e Inertia.js
 
 ## Sobre o Projeto
 
