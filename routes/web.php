@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('tasks')->group(function () {
         Route::patch('/{task}', [TaskController::class, 'update'])->name('tasks.update');
         Route::post('/', [TaskController::class, 'store'])->name('tasks.store');
+        Route::delete('/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     });
 });
 

@@ -31,4 +31,11 @@ class TaskController extends Controller
 
         return back();
     }
+
+    public function destroy(Task $task): RedirectResponse
+    {
+        $task->delete();
+
+        return back();
+    }
 }
