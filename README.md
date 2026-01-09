@@ -1,4 +1,4 @@
-# Desafio Técnico Tehokas | Checklist em Laravel
+# Desafio Técnico Tehokas | Checklist em Laravel e Inertia.js
 
 ## Sobre o Projeto
 
