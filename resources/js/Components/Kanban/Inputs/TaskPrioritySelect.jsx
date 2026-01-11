@@ -25,7 +25,7 @@ const TaskPrioritySelect = ({ value, onValueChange }) => {
 				<SelectContent>
 					{Object.values(PRIORITY).map((priority) => (
 						<SelectItem key={priority.key} value={String(priority.key)}>
-							<div className="flex items-center justify-between w-[135px]">
+							<div className="flex items-center justify-between w-[165px]">
 								<span>{priority.label}</span>
 								<span>{priority.emoji}</span>
 							</div>
