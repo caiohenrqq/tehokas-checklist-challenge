@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -24,14 +25,17 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function show(Project $project): Response
+    public function show(Request $request, Project $project): Response
     {
-        $project->load(['tasks' => function ($query) {
+        $project->load(['tasks' => function ($query) use ($request) {
             $query->orderBy('position', 'asc');
+
+            if ($request->filled('priority')) $query->where('priority', $request->input('priority'));
         }]);
 
         return Inertia::render('Project/Show', [
             'project' => new ProjectResource($project),
+            'filters' => $request->only(['priority']),
         ]);
     }
 
