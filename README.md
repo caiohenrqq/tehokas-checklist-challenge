@@ -1,18 +1,15 @@
 # Tehokas | Checklist (Kanban) em Laravel e Inertia.js
 
-## Sobre o Projeto
-
-Este é um sistema de gerenciamento de tarefas (Kanban) moderno e interativo.
-
 ## 🛠 Tecnologias Utilizadas
 
 O projeto foi construído utilizando as seguintes tecnologias:
 
 - PHP com Laravel 12  
 - React com Inertia.js e JavaScript  
-- Framer Motion  
+- [Framer Motion](https://github.com/motiondivision/motion)
 - SQLite  
-- TailwindCSS & Shadcn/UI  
+- TailwindCSS & Shadcn/UI
+- Drag and drop com [@hello-pangea/dnd](https://github.com/hello-pangea/dnd)
 
 ## 🚀 Como Rodar o Projeto
 
@@ -36,7 +33,7 @@ Após rodar as migrações, utilize os seguintes dados para login:
 
 **Nota:** Você também pode criar uma nova conta registrando-se diretamente na aplicação.
 
-## Opção 1: Instalação Automática (Via Makefile)
+## Opção 1: Instalação Automática (Makefile)
 
 Recomendado para Linux, Mac e WSL.
 
@@ -57,18 +54,10 @@ Inicia o Sail e o servidor de desenvolvimento do frontend.
 ```
 make run
 ```
- 
-### Parar o Projeto
-
-```
-make stop
-```
 
 ## Opção 2: Manual com Laravel Sail (Docker)
 
-Recomendado para Windows (PowerShell) ou sem Make.
-
-Se você está no Windows e não usa WSL, use estes comandos no PowerShell.
+Recomendado para Windows sem WSL.
 
 ### Clone e Instale as dependências
 
@@ -98,6 +87,9 @@ npm install
 # Copia o env
 cp .env.example .env
 
+# Cria o arquivo do banco SQLite
+touch database/database.sqlite
+
 # Gera chave e roda migrações dentro do container
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan migrate --seed
@@ -111,5 +103,6 @@ cp .env.example .env
 
 ### Acesso
 
-Acesse em: http://localhost
+```
+http://localhost
 ```
