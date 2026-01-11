@@ -39,7 +39,9 @@ const ProjectCard = ({ project }) => {
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const { delete: destroy, processing } = useForm();
 
+	const totalTasks = project.tasks?.length || 0;
 	const delayedCount = project.tasks?.filter((t) => t.is_delayed).length || 0;
+	const isAlert = totalTasks > 0 && delayedCount / totalTasks >= 0.2;
 
 	const handleDelete = () => {
 		destroy(route("projects.destroy", project.id), {
@@ -65,22 +67,8 @@ const ProjectCard = ({ project }) => {
 						</h3>
 
 						<div className="flex items-center gap-3 shrink-0">
-							{delayedCount > 0 ? (
-								<Badge
-									variant="destructive"
-									className="h-6 flex items-center gap-2 px-2.5 bg-red-50 text-red-700 hover:bg-red-100 border-red-100 shadow-none"
-								>
-									<span className="font-bold">Alerta</span>
-									<div className="w-px h-3 bg-red-200" />
-									<span className="flex items-center gap-1 font-medium text-[10px]">
-										{delayedCount}
-									</span>
-								</Badge>
-							) : (
-								<HealthBadge health={project.health} />
-							)}
+							<HealthBadge health={isAlert ? "ALERT" : project.health} />
 
-							{/* Dropdown Menu - onClick prevents Link navigation */}
 							<DropdownMenu>
 								<DropdownMenuTrigger asChild>
 									<Button

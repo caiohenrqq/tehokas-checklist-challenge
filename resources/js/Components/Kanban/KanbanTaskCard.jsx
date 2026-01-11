@@ -22,6 +22,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/Components/Shadcn/UI/dropdown-menu";
+import { PRIORITY } from "@/Constants/priority";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/Utils/formatters";
 import { Button } from "../Shadcn/UI/button";
@@ -32,14 +33,15 @@ const KanbanTaskCard = ({ task, index }) => {
 	const [editOpen, setEditOpen] = useState(false);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
+	const priorityConfig = Object.values(PRIORITY).find(
+		(p) => p.key === task.priority,
+	);
+
 	const handleDelete = () => {
 		destroy(route("tasks.destroy", task.id), {
-			onSuccess: () => {
-				setDeleteDialogOpen(false);
-			},
+			onSuccess: () => setDeleteDialogOpen(false),
 			onError: () => {
 				setDeleteDialogOpen(false);
-				console.error("Error deleting task");
 			},
 		});
 	};
@@ -56,14 +58,21 @@ const KanbanTaskCard = ({ task, index }) => {
 					>
 						<Card
 							className={cn(
-								"group relative transition-all duration-200 ease-out border",
+								"group relative transition-all duration-200 ease-out border overflow-hidden",
 								snapshot.isDragging
 									? "shadow-xl scale-[1.02] ring-1 ring-gray-900/5 z-50 cursor-grabbing border-gray-300"
 									: "shadow-sm hover:shadow-md border-gray-100 cursor-grab",
 								task.is_delayed ? "bg-red-50/50" : "bg-white",
 							)}
 						>
-							<CardHeader className="p-4 pb-2 space-y-0">
+							<div
+								className={cn(
+									"h-1.5 w-full absolute top-0 left-0 right-0",
+									priorityConfig?.color,
+								)}
+							/>
+
+							<CardHeader className="p-4 pb-2 pt-5 space-y-0">
 								<div className="flex justify-between items-start gap-3">
 									<span className="font-medium text-sm text-gray-900 leading-snug flex-1 break-words">
 										{task.title}
@@ -109,7 +118,7 @@ const KanbanTaskCard = ({ task, index }) => {
 
 							<CardFooter className="p-4 pt-2">
 								<div className="flex items-center gap-1.5 text-gray-400 group-hover:text-gray-600 transition-colors w-full">
-									{/** biome-ignore lint/a11y/noSvgWithoutTitle: <title is useless here> */}
+									{/** biome-ignore lint/a11y/noSvgWithoutTitle: <xyz> */}
 									<svg
 										className="w-3.5 h-3.5"
 										fill="none"

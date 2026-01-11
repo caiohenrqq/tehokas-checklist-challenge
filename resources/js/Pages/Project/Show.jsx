@@ -1,13 +1,14 @@
 import { DragDropContext } from "@hello-pangea/dnd";
 import { Head, Link } from "@inertiajs/react";
-import { ArrowLeft, Layout } from "lucide-react";
 import { motion } from "framer-motion";
+import { ArrowLeft, Layout } from "lucide-react";
+import TaskPriorityFilter from "@/Components/Kanban/Filters/TaskPriorityFilter";
 import KanbanColumn from "@/Components/Kanban/KanbanColumn";
 import { HealthBadge } from "@/Components/UI/HealthBadge";
 import { useKanban } from "@/Hooks/useKanban";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-export default function Show({ auth, project }) {
+export default function Show({ auth, project, filters }) {
 	const { title, health, description, id } = project.data;
 
 	const { localTasks, columns, onDragEnd } = useKanban(project.data.tasks);
@@ -42,7 +43,7 @@ export default function Show({ auth, project }) {
 							</Link>
 						</div>
 
-						<div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+						<div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
 							<div className="space-y-2 flex-1">
 								<div className="flex items-center gap-3">
 									<div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
@@ -59,44 +60,53 @@ export default function Show({ auth, project }) {
 								</p>
 							</div>
 
-							<div className="flex items-center gap-8 bg-zinc-50/80 dark:bg-zinc-900/80 px-6 py-3 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 shadow-sm backdrop-blur-sm">
-								<div className="flex flex-col items-center min-w-[60px]">
-									<span className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 mb-0.5">
-										Total
-									</span>
-									<span className="text-xl font-bold text-zinc-900 dark:text-white">
-										{totalTasks}
-									</span>
-								</div>
-
-								<div className="w-px h-8 bg-zinc-200 dark:bg-zinc-800" />
-
-								<div className="flex flex-col items-center min-w-[60px]">
-									<span className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 mb-0.5">
-										Atrasadas
-									</span>
-									<span
-										className={`text-xl font-bold ${
-											delayedCount > 0
-												? "text-red-500"
-												: "text-zinc-900 dark:text-white"
-										}`}
-									>
-										{delayedCount}
-									</span>
-								</div>
-
-								<div className="w-px h-8 bg-zinc-200 dark:bg-zinc-800" />
-
-								<div className="flex flex-col items-center min-w-[60px]">
-									<span className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 mb-0.5">
-										Progresso
-									</span>
-									<div className="flex items-center gap-1.5">
-										<span className="text-xl font-bold text-emerald-500">
-											{progress}%
+							<div className="flex flex-col items-end gap-3 lg:mt-1">
+								<div className="flex items-center gap-8 bg-zinc-50/80 dark:bg-zinc-900/80 px-6 py-3 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 shadow-sm backdrop-blur-sm">
+									<div className="flex flex-col items-center min-w-[60px]">
+										<span className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 mb-0.5">
+											Total
+										</span>
+										<span className="text-xl font-bold text-zinc-900 dark:text-white">
+											{totalTasks}
 										</span>
 									</div>
+
+									<div className="w-px h-8 bg-zinc-200 dark:bg-zinc-800" />
+
+									<div className="flex flex-col items-center min-w-[60px]">
+										<span className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 mb-0.5">
+											Atrasadas
+										</span>
+										<span
+											className={`text-xl font-bold ${
+												delayedCount > 0
+													? "text-red-500"
+													: "text-zinc-900 dark:text-white"
+											}`}
+										>
+											{delayedCount}
+										</span>
+									</div>
+
+									<div className="w-px h-8 bg-zinc-200 dark:bg-zinc-800" />
+
+									<div className="flex flex-col items-center min-w-[60px]">
+										<span className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 mb-0.5">
+											Progresso
+										</span>
+										<div className="flex items-center gap-1.5">
+											<span className="text-xl font-bold text-emerald-500">
+												{progress}%
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<div className="flex items-center gap-2">
+									<span className="text-[10px] uppercase tracking-wider font-bold text-zinc-400">
+										Filtrar:
+									</span>
+									<TaskPriorityFilter currentPriority={filters?.priority} />
 								</div>
 							</div>
 						</div>

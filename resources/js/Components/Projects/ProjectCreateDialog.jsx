@@ -22,7 +22,7 @@ export default function ProjectCreateDialog() {
 		description: "",
 	});
 
-	const submit = (e) => {
+	const onSubmit = (e) => {
 		e.preventDefault();
 		post(route("projects.store"), {
 			onSuccess: () => {
@@ -45,7 +45,7 @@ export default function ProjectCreateDialog() {
 			</DialogTrigger>
 
 			<DialogContent className="sm:max-w-[500px] p-0 gap-0 overflow-hidden border-0 shadow-2xl bg-white dark:bg-zinc-900">
-				<form onSubmit={submit}>
+				<form onSubmit={onSubmit}>
 					<DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-100 dark:border-zinc-800">
 						<div className="flex items-center gap-4">
 							<div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-500/10">

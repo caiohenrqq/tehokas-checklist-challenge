@@ -1,6 +1,7 @@
 import { Head, Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { ArrowRight, Layout } from "lucide-react";
+import { FooterLayout } from "@/Layouts/FooterLayout";
 
 const MotionLink = motion(Link);
 
@@ -64,7 +65,6 @@ export default function Welcome({ auth }) {
 
 			<div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white dark:bg-black text-black/50 dark:text-white/50 selection:bg-indigo-500 selection:text-white">
 				<div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-zinc-950 [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)] dark:[background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)] opacity-30"></div>
-
 				<motion.div
 					variants={containerVariants}
 					initial="hidden"
@@ -132,14 +132,7 @@ export default function Welcome({ auth }) {
 					</motion.div>
 				</motion.div>
 
-				<motion.div
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transition={{ delay: 1, duration: 1 }}
-					className="absolute bottom-6 text-xs text-zinc-400 dark:text-zinc-600"
-				>
-					&copy; {new Date().getFullYear()} · Construído com ❤️ por caiohenrqq
-				</motion.div>
+				<FooterLayout />
 			</div>
 		</>
 	);
