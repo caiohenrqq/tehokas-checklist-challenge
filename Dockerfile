@@ -28,5 +28,5 @@ RUN npm install && npm run build
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 CMD touch /var/www/html/database/database.sqlite && \
-    php artisan migrate --force && \
+    php artisan migrate --force --seed && \
     php artisan serve --host=0.0.0.0 --port=$PORT
