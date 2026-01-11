@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
@@ -29,6 +30,7 @@ class StoreTaskRequest extends FormRequest
             'description'=> ['nullable', 'string'],
             'deadline' => ['nullable', 'date'],
             'status' => ['required', new Enum(TaskStatus::class)],
+            'priority' => ['required', new Enum(TaskPriority::class)],
         ];
     }
 }

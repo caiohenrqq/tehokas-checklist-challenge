@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $description
  * @property TaskStatus $status
  * @property \Illuminate\Support\Carbon|null $deadline
+ * @property TaskPriority $priority
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Project $project
@@ -41,6 +43,7 @@ class Task extends Model
         'deadline',
         'project_id',
         'position',
+        'priority',
     ];
 
     protected function casts(): array
@@ -48,6 +51,7 @@ class Task extends Model
         return [
             'deadline' => 'datetime',
             'status' => TaskStatus::class,
+            'priority' => TaskPriority::class,
         ];
     }
 

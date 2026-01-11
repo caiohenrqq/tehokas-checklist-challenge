@@ -18,6 +18,7 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status->value,
             'deadline' => $this->deadline,
+            'priority' => $this->priority,
             'is_delayed' => $this->isDelayed(),
         ];
     }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->dateTime('deadline')->nullable();
             $table->unsignedBigInteger('position')->default(0)->index();
+            $table->unsignedSmallInteger('priority')->default(0);
             $table->timestamps();
         });
     }
