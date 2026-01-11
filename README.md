@@ -57,7 +57,7 @@ Inicia o Sail e o servidor de desenvolvimento do frontend.
 make run
 ```
 
-## Opção 2: Manual com Laravel Sail (Docker)
+## Opção 2: Manual
 
 Recomendado para Windows sem WSL.
 
