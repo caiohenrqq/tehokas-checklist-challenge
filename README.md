@@ -1,5 +1,7 @@
 # Kanban c/ drag-and-drop em Laravel & Inertia.js. 
 
+> Deploy pela Railway: https://kanban-board.up.railway.app/
+
 ![Recording 2026-01-11 at 14 31 29](https://github.com/user-attachments/assets/d4f482b3-e769-4da0-83ae-66c1bbfcd63f)
 
 ## 🛠 Tecnologias Utilizadas
