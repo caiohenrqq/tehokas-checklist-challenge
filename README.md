@@ -13,6 +13,8 @@ O projeto foi construído utilizando as seguintes tecnologias:
 - TailwindCSS & Shadcn/UI
 - Drag and drop com [@hello-pangea/dnd](https://github.com/hello-pangea/dnd)
 
+<img width="1347" height="550" alt="{310636F3-8001-453B-9D4D-D17C281E7C23}" src="https://github.com/user-attachments/assets/3ccd42d9-65a0-49bd-89dc-f4ad945e6705" />
+
 ## 🚀 Como Rodar o Projeto
 
 ### Pré-requisitos
