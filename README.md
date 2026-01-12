@@ -15,6 +15,10 @@ O projeto foi construído utilizando as seguintes tecnologias:
 
 <img width="1347" height="550" alt="{310636F3-8001-453B-9D4D-D17C281E7C23}" src="https://github.com/user-attachments/assets/3ccd42d9-65a0-49bd-89dc-f4ad945e6705" />
 
+## 🚩 Maior Dificuldade Técnica e Como Superei
+
+> Sem a prevenção de erros do TypeScript, falhas de digitação só eram notadas em runtime. Superei a falta de autocomplete mantendo os arquivos de origem abertos lado a lado (split view) na IDE, criando uma referência visual constante que eliminou a necessidade de troca de contexto, ganhando de volta minha produtividade de sempre.
+
 ## 🚀 Como Rodar o Projeto
 
 ### Pré-requisitos
